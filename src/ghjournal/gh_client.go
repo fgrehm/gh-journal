@@ -13,8 +13,8 @@ type GitHubClient interface {
 }
 
 type gitHubClient struct {
-	user *octokit.User
-	client   *octokit.Client
+	user   *octokit.User
+	client *octokit.Client
 }
 
 func NewGitHubClient(userName, token string) (GitHubClient, error) {
@@ -31,8 +31,8 @@ func NewGitHubClient(userName, token string) (GitHubClient, error) {
 	}
 
 	return &gitHubClient{
-		user:     user,
-		client:   client,
+		user:   user,
+		client: client,
 	}, nil
 }
 
