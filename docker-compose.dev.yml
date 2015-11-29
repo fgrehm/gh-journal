@@ -2,7 +2,7 @@ hack:
   image: fgrehm/alpine-go-web:1.5.1
   command: bash
   volumes:
-   - .:/code
+  - .:/code
   stdin_open: true
   tty: true
   links:
@@ -10,3 +10,10 @@ hack:
 
 mongo:
   image: 'mongo:3.1.9'
+
+mongoexpress:
+  image: 'knickers/mongo-express'
+  ports:
+  - '8081:8081'
+  links:
+  - 'mongo'
