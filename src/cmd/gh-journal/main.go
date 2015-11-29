@@ -18,20 +18,33 @@ func main() {
 	}
 	defer session.Close()
 
-	eventsCollection := session.DB("gh-journal").C("events")
+	repo := ghjournal.NewEventsRepository(session.DB("gh-journal"))
 	for pageNum := 1; pageNum <= 10; pageNum++ {
-		log.Printf("Fetching events from page %d...", pageNum)
+		log.Printf("Importing events from page %d...", pageNum)
 		ghEvents, err := client.Events(pageNum)
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("%+v", len(ghEvents))
+		createdAtLeastOneEvent := false
 		for _, event := range ghEvents {
-			err = eventsCollection.Insert(event)
+			id := event["id"].(string)
+			if exists, err := repo.Exists(id); err != nil {
+				log.Fatal(err)
+			} else if exists {
+				log.Printf("SKIP ID=%s", id)
+				continue
+			}
+
+			createdAtLeastOneEvent = true
+			log.Printf("CREATE ID=%s", id)
+			err = repo.Insert(event)
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
-		log.Printf("Done fetching events from page %d", pageNum)
+		if !createdAtLeastOneEvent {
+			log.Printf("Done with import at page %d", pageNum)
+			break
+		}
 	}
 }
