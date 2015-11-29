@@ -3,24 +3,9 @@ package ghjournal
 import (
   "strings"
   "time"
-
   "gopkg.in/mgo.v2"
   "gopkg.in/mgo.v2/bson"
 )
-
-type Project struct {
-  Owner string
-  Name  string
-}
-
-type Event struct {
-  ID string
-  Type string
-  Action *string
-  CreatedAt time.Time `bson:"created_at"`
-  Project Project
-  Raw map[string]interface{}
-}
 
 type EventsRepository interface {
   Exists(id string) (bool, error)
@@ -42,21 +27,29 @@ func (r *eventsRepository) Exists(id string) (bool, error) {
 }
 
 func (r *eventsRepository) Insert(ghEvent GitHubEvent) error {
-  id := ghEvent["id"].(string)
-  delete(ghEvent, "id")
-
-  eventType := ghEvent["type"].(string)
-  delete(ghEvent, "type")
-
-  createdAt, err := time.Parse(time.RFC3339, ghEvent["created_at"].(string))
+  e, err := r.buildEvent(ghEvent)
   if err != nil {
     return err
   }
-  delete(ghEvent, "created_at")
+  return r.collection.Insert(e)
+}
+
+func (r *eventsRepository) buildEvent(ghEvent GitHubEvent) (*Event, error) {
+  event := &Event {
+    ID: ghEvent["id"].(string),
+    Type: ghEvent["type"].(string),
+    Raw: ghEvent,
+  }
+
+  createdAt, err := time.Parse(time.RFC3339, ghEvent["created_at"].(string))
+  if err != nil {
+    return &Event{}, err
+  }
+  event.CreatedAt = createdAt
 
   repoSlug := ghEvent["repo"].(map[string]interface{})["name"].(string)
   projectOwnerAndName := strings.SplitN(repoSlug, "/", 2)
-  project := Project{
+  event.Project = Project{
     Owner: projectOwnerAndName[0],
     Name:  projectOwnerAndName[1],
   }
@@ -67,14 +60,7 @@ func (r *eventsRepository) Insert(ghEvent GitHubEvent) error {
     str := payload["action"].(string)
     action = &str
   }
+  event.Action = action
 
-  event := Event {
-    ID: id,
-    Type: eventType,
-    Action: action,
-    CreatedAt: createdAt,
-    Project: project,
-    Raw: ghEvent,
-  }
-  return r.collection.Insert(event)
+  return event, nil
 }

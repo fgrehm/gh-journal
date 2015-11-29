@@ -10,7 +10,11 @@ import (
 func main() {
 	token := os.Getenv("GITHUB_TOKEN")
 	userName := "fgrehm"
-	client := ghjournal.NewGitHubClient(userName, token)
+
+	client, err := ghjournal.NewGitHubClient(userName, token)
+	if err != nil {
+		panic(err)
+	}
 
 	session, err := mgo.Dial("172.17.0.2")
 	if err != nil {
