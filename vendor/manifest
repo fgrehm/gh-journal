@@ -2,6 +2,32 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/fhs/go-netrc/netrc",
+			"repository": "https://github.com/fhs/go-netrc",
+			"revision": "4422b68c9c934b03e8e53ef18c8c8714542def7e",
+			"branch": "master",
+			"path": "/netrc"
+		},
+		{
+			"importpath": "github.com/jingweno/go-sawyer",
+			"repository": "https://github.com/jingweno/go-sawyer",
+			"revision": "1999ae5763d678f3ce1112cf1fda7c7e9cf2aadf",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/jtacoma/uritemplates",
+			"repository": "https://github.com/jtacoma/uritemplates",
+			"revision": "802b8e24dbf0f556badb3a1401a49f6bfda80ca6",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/octokit/go-octokit/octokit",
+			"repository": "https://github.com/octokit/go-octokit",
+			"revision": "6a9640975a03253f6cd9f224a438f0cd6ffc96f5",
+			"branch": "master",
+			"path": "/octokit"
+		},
+		{
 			"importpath": "gopkg.in/mgo.v2",
 			"repository": "https://gopkg.in/mgo.v2",
 			"revision": "4d04138ffef2791c479c0c8bbffc30b34081b8d9",
