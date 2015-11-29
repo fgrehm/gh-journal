@@ -16,6 +16,7 @@ type Project struct {
 type Event struct {
   ID string
   Type string
+  Action *string
   CreatedAt time.Time `bson:"created_at"`
   Project Project
   Raw map[string]interface{}
@@ -60,9 +61,17 @@ func (r *eventsRepository) Insert(ghEvent GitHubEvent) error {
     Name:  projectOwnerAndName[1],
   }
 
+  var action *string = nil
+  payload := ghEvent["payload"].(map[string]interface{})
+  if payload["action"] != nil {
+    str := payload["action"].(string)
+    action = &str
+  }
+
   event := Event {
     ID: id,
     Type: eventType,
+    Action: action,
     CreatedAt: createdAt,
     Project: project,
     Raw: ghEvent,
