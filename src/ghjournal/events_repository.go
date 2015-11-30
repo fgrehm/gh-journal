@@ -1,15 +1,17 @@
 package ghjournal
 
 import (
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"strings"
 	"time"
+
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type EventsRepository interface {
 	Exists(id string) (bool, error)
-	Insert(GitHubEvent) error
+	EventsWithin(rangeStart, rangeEnd time.Time) ([]Event, error)
+	Insert(ghEvent GitHubEvent) error
 }
 
 type eventsRepository struct {
@@ -24,6 +26,20 @@ func (r *eventsRepository) Exists(id string) (bool, error) {
 	query := r.collection.Find(bson.M{"id": id})
 	count, err := query.Count()
 	return count > 0, err
+}
+
+func (r *eventsRepository) EventsWithin(startTime, endTime time.Time) ([]Event, error) {
+	query := r.collection.Find(bson.M{
+		"created_at": bson.M{
+			"$gte": startTime,
+			"$lt":  endTime,
+		},
+	})
+	query = query.Sort("-created_at")
+
+	events := []Event{}
+	err := query.All(&events)
+	return events, err
 }
 
 func (r *eventsRepository) Insert(ghEvent GitHubEvent) error {
