@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"ghjournal"
-	"gopkg.in/mgo.v2"
 	log "github.com/Sirupsen/logrus"
+	"gopkg.in/mgo.v2"
 )
 
 func main() {
