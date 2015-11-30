@@ -1,12 +1,16 @@
 package main
 
 import (
+	"os"
+
 	"ghjournal"
 	"gopkg.in/mgo.v2"
-	"os"
+	log "github.com/Sirupsen/logrus"
 )
 
 func main() {
+	log.SetLevel(log.DebugLevel)
+
 	token := os.Getenv("GITHUB_TOKEN")
 	userName := "fgrehm"
 

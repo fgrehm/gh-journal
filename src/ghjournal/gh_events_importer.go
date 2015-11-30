@@ -1,7 +1,7 @@
 package ghjournal
 
 import (
-  "log"
+  log "github.com/Sirupsen/logrus"
 )
 
 func ImportEvents(client GitHubClient, repo EventsRepository) error {
@@ -17,7 +17,7 @@ func ImportEvents(client GitHubClient, repo EventsRepository) error {
       if exists, err := repo.Exists(id); err != nil {
         return err
       } else if exists {
-        log.Printf("SKIP ID=%s", id)
+        log.Debugf("SKIP ID=%s", id)
         continue
       }
 
