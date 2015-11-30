@@ -2,6 +2,12 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/Sirupsen/logrus",
+			"repository": "https://github.com/Sirupsen/logrus",
+			"revision": "cdaedc68f2894175ac2b3221869685602c759e71",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/fhs/go-netrc/netrc",
 			"repository": "https://github.com/fhs/go-netrc",
 			"revision": "4422b68c9c934b03e8e53ef18c8c8714542def7e",
@@ -26,6 +32,18 @@
 			"revision": "6a9640975a03253f6cd9f224a438f0cd6ffc96f5",
 			"branch": "master",
 			"path": "/octokit"
+		},
+		{
+			"importpath": "gopkg.in/airbrake/gobrake.v2",
+			"repository": "https://gopkg.in/airbrake/gobrake.v2",
+			"revision": "e5efbe565a5a63d8aafee7efa2f4fdd7f42b7bd3",
+			"branch": "master"
+		},
+		{
+			"importpath": "gopkg.in/gemnasium/logrus-airbrake-hook.v2",
+			"repository": "https://gopkg.in/gemnasium/logrus-airbrake-hook.v2",
+			"revision": "31e6fd4bd5a98d8ee7673d24bc54ec73c31810dd",
+			"branch": "master"
 		},
 		{
 			"importpath": "gopkg.in/mgo.v2",
