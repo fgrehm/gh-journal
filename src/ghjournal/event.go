@@ -11,7 +11,7 @@ type Event struct {
 	CreatedAt time.Time `bson:"created_at"`
 	Project   Project
 	Raw       map[string]interface{}
-	// TODO: Actor string
+	Actor     string
 }
 
 type Project struct {

@@ -78,5 +78,8 @@ func (r *eventsRepository) buildEvent(ghEvent GitHubEvent) (*Event, error) {
 	}
 	event.Action = action
 
+	actor := ghEvent["actor"].(map[string]interface{})["login"].(string)
+	event.Actor = actor
+
 	return event, nil
 }
