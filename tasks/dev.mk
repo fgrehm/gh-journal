@@ -1,6 +1,6 @@
 .PHONY: hack
 hack:
-	docker-compose -f docker-compose.dev.yml run --rm hack
+	docker-compose -f docker-compose.dev.yml run --service-ports --rm hack
 
 .PHONY: test
 test:

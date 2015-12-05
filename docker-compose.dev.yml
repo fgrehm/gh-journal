@@ -1,8 +1,10 @@
 hack:
   image: fgrehm/alpine-go-web:1.5.1
   command: bash
+  ports:
+  - '8080:8080'
   volumes:
-  - .:/code
+  - '.:/code'
   stdin_open: true
   tty: true
   links:
@@ -10,6 +12,8 @@ hack:
 
 mongo:
   image: 'mongo:3.1.9'
+  volumes:
+  - './data/mongo:/data/db'
 
 mongoexpress:
   image: 'knickers/mongo-express'

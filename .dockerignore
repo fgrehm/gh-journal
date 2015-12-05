@@ -24,10 +24,15 @@ _testmain.go
 *.prof
 
 # Gb output dirs
+bin
 bin/
+pkg
 pkg/
 
 # Client assets
 src/ghjournal/assets
+src/ghjournal/assets/
+data
 data/
+www
 www/

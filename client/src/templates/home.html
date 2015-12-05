@@ -1,0 +1,21 @@
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+  <md-list class="muppet-list">
+    <md-item ng-repeat="it in muppets">
+      <md-item-content>
+        <md-button ng-click="selectMuppet(it)" ng-class="{'selected' : it === selected }">
+          <img ng-src="{{it.iconurl}}" class="face" alt="" width="80">
+          {{it.name}}
+        </md-button>
+      </md-item-content>
+    </md-item>
+  </md-list>
+</md-sidenav>
+<div layout="column" flex class="content-wrapper" id="primary-col">
+  <md-content layout="column" flex class="md-padding">
+    <h2>{{selected.name}}</h2>
+    <p>{{selected.content}}</p>
+    <div class="cell">
+      <img ng-src="{{selected.imgurl}}" alt="{{selected.imgalt}}">
+    </div>
+  </md-content>
+</div>

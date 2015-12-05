@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GitHub Journal</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link href="css/index.css" rel="stylesheet">
+
+    <style type="text/css">
+      /** * Hide when Angular is not yet loaded and initialized */
+      [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body ng-app="gh-journal" layout="column" ng-cloak>
+    <md-toolbar layout="row">
+      <md-button ng-click="$mdSidenav('left').toggle()" hide-gt-sm class="md-icon-button menuBtn">
+        <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+      </md-button>
+      <h1 layout-align-gt-sm="center" class="md-toolbar-tools">My Favorite Muppets</h1>
+    </md-toolbar>
+    <div layout="row" flex class="content-wrapper">
+      <!-- <md-content layout="column" flex class="md-padding" ui-view="main-content"></md-content>-->
+      <ui-view layout="row" flex></ui-view>
+    </div>
+
+    <script type="text/javascript" src="js/index.js"></script>
+  </body>
+</html>
