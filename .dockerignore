@@ -36,3 +36,4 @@ data
 data/
 www
 www/
+client/browserify-cache.json

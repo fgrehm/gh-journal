@@ -18,7 +18,7 @@ output_js_dependencies = node_modules $(source_js)
 all: build
 
 .PHONY: clean
-clean:; rm -rf $(output)
+clean:; rm -rf $(output) browserify-cache.json
 
 .PHONY: build
 build: javascript stylesheet rest
@@ -32,8 +32,9 @@ node_modules: package.json
 
 $(output_js): $(output_js_dependencies)
 	@mkdir -p $(dir $@)
-	@echo 'Executing browserify...'
-	@APP_TAG=$(APP_TAG) browserify $(source)/index.js \
+	@echo 'Executing browserifyinc...'
+	@browserifyinc $(source)/index.js \
+		--verbose \
 		--outfile $@
 
 .PHONY: stylesheet
