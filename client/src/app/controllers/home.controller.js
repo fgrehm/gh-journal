@@ -1,33 +1,12 @@
-function HomeCtrl($scope, $mdSidenav, muppetService, $timeout, $log) {
-  console.log('ooo');
-  var allMuppets = [];
-
-  $scope.selected = null;
-  $scope.muppets = allMuppets;
-  $scope.selectMuppet = selectMuppet;
-  $scope.toggleSidenav = toggleSidenav;
-
-  loadMuppets();
-
-  //*******************
-  // Internal Methods
-  //*******************
-  function loadMuppets() {
-    muppetService.loadAll()
-      .then(function(muppets){
-        allMuppets = muppets;
-        $scope.muppets = [].concat(muppets);
-        $scope.selected = $scope.muppets[0];
-      })
-  }
-
-  function toggleSidenav(name) {
-    $mdSidenav(name).toggle();
-  }
-
-  function selectMuppet(muppet) {
-    $scope.selected = angular.isNumber(muppet) ? $scope.muppets[muppet] : muppet;
-    $scope.toggleSidenav('left');
+function HomeCtrl($scope) {
+  $scope.editions = [];
+  for (var i = 1; i <= 31; i++) {
+    $scope.editions.push({
+      date: '2015-01-' + i,
+        eventsCount: (Math.random() * 1000).toFixed(),
+        projectsUpdated: (Math.random() * 50).toFixed(),
+        starredProjects: (Math.random() * 20).toFixed()
+    });
   }
 };
 

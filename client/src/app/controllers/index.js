@@ -3,10 +3,14 @@ var controllers = angular.module(MODULE_NAME, []);
 
 // controllers ==================================================================
 var Home = require('./home.controller');
-Home.$inject = ['$scope', '$mdSidenav', 'muppetService', '$timeout','$log'];
+Home.$inject = ['$scope'];
+
+var Edition = require('./edition.controller');
+Edition.$inject = ['$scope', '$mdSidenav', 'muppetService', '$timeout','$log'];
 
 controllers
-  .controller('app.home', Home)
+  .controller('app.controllers.home', Home)
+  .controller('app.controllers.edition', Edition)
   .service('muppetService', ['$q', function($q) {
     var muppets = [{
         name: 'Animal',
