@@ -1,23 +1,32 @@
-function EditionCtrl($scope, $mdSidenav, muppetService, $timeout, $log) {
-  console.log('foo');
-  var allMuppets = [];
+function EditionCtrl($scope, $mdSidenav, projectsService, $stateParams) {
+  var allProjects = [];
 
   $scope.selected = null;
-  $scope.muppets = allMuppets;
-  $scope.selectMuppet = selectMuppet;
+  $scope.projects = allProjects;
+  $scope.selectProject = selectProject;
   $scope.toggleSidenav = toggleSidenav;
+  $scope.editionDate = $stateParams.editionDate;
 
-  loadMuppets();
+  loadProjects().then(function() {
+    if (!$stateParams.projectName) return;
+
+    var projectName = unescape($stateParams.projectName);
+    allProjects.forEach(function select(project) {
+      if (project.name == projectName) {
+        selectProject(project);
+      }
+    });
+  });
 
   //*******************
   // Internal Methods
   //*******************
-  function loadMuppets() {
-    muppetService.loadAll()
-      .then(function(muppets){
-        allMuppets = muppets;
-        $scope.muppets = [].concat(muppets);
-        $scope.selected = $scope.muppets[0];
+  function loadProjects() {
+    return projectsService.loadAll()
+      .then(function(projects){
+        allProjects = projects;
+        $scope.projects = [].concat(projects);
+        $scope.selected = $scope.projects[0];
       })
   }
 
@@ -25,8 +34,8 @@ function EditionCtrl($scope, $mdSidenav, muppetService, $timeout, $log) {
     $mdSidenav(name).toggle();
   }
 
-  function selectMuppet(muppet) {
-    $scope.selected = angular.isNumber(muppet) ? $scope.muppets[muppet] : muppet;
+  function selectProject(project) {
+    $scope.selected = angular.isNumber(project) ? $scope.projects[project] : project;
     $scope.toggleSidenav('left');
   }
 };

@@ -1,21 +1,25 @@
 <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
-  <md-list class="muppet-list">
-    <md-item ng-repeat="it in muppets">
+  <md-list class="projects-list">
+    <md-item>
       <md-item-content>
-        <md-button ng-click="selectMuppet(it)" ng-class="{'selected' : it === selected }">
-          <img ng-src="{{it.iconurl}}" class="face" alt="" width="80">
-          {{it.name}}
+        <h4>Date: {{ editionDate }}</h4>
+      </md-item-content>
+    </md-item>
+    <md-item ng-repeat="it in projects">
+      <md-item-content>
+        <md-button ui-sref="projectInfo({editionDate: editionDate, projectName: it.name})" ng-class="{'selected' : it === selected }">
+          <img ng-src="{{it.iconurl}}" class="face">
+          <span>{{ it.name }}</span>
+          <span class="badge">{{ it.eventsCount }}</span>
         </md-button>
       </md-item-content>
     </md-item>
   </md-list>
 </md-sidenav>
-<div layout="column" flex class="content-wrapper" id="primary-col">
+<div layout="column" flex class="content-wrapper" id="primary-col" ng-if="!!selected">
   <md-content layout="column" flex class="md-padding">
     <h2>{{selected.name}}</h2>
-    <p>{{selected.content}}</p>
-    <div class="cell">
-      <img ng-src="{{selected.imgurl}}" alt="{{selected.imgalt}}">
-    </div>
+    <hr>
+    <p style="font-size: 30px;">Fill me up with data for {{selected.name}}</p>
   </md-content>
 </div>

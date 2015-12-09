@@ -1,12 +1,12 @@
 <md-content layout="column" flex class="md-padding gridListdemoBasicUsage">
   <h2>Welcome to GitHub Journal</h2>
-  <h3>Select an edition</h3>
   <md-grid-list
+    id="calendar"
     md-cols-md="4" md-cols-gt-md="7"
     md-row-height-gt-md="1:1" md-row-height="2:2"
     md-gutter="12px" md-gutter-gt-sm="8px"
     flex>
-    <md-grid-tile ng-repeat="edition in editions" ui-sref="edition()">
+    <md-grid-tile ng-repeat="edition in editions" ui-sref="edition({editionDate: edition.date})">
       <md-grid-tile-header flex>
         <h3 class="md-display-1">{{ edition.date }}</h3>
       </md-grid-tile-header>

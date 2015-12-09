@@ -5,12 +5,12 @@
   margin-right: 0;
 }
 
-.muppet-list .md-button {
+.projects-list .md-button {
   color: inherit;
   text-align: left;
   width: 100%;
 }
-.muppet-list .selected {
+.projects-list .selected {
   color: #03a9f4;
 }
 .face {
@@ -42,4 +42,20 @@
   figure {
     background: #f5f5f5;
   }
+}
+
+#calendar > * {
+  cursor: pointer;
+}
+
+.md-sidenav-left {
+  overflow-x: hidden;
+}
+
+.badge {
+  margin: 0 0 0 8px;
+  background-color: #259b24;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
