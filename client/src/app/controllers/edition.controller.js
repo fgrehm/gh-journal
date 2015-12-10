@@ -26,7 +26,7 @@ function EditionCtrl($scope, $mdSidenav, projectsService, $stateParams) {
       .then(function(projects){
         allProjects = projects;
         $scope.projects = [].concat(projects);
-        $scope.selected = $scope.projects[0];
+        // $scope.selected = $scope.projects[0];
       })
   }
 

@@ -13,20 +13,24 @@ controllers
   .controller('app.controllers.edition', Edition)
   .service('projectsService', ['$q', function($q) {
     var projects = [{
-        name: 'linux/linux',
-        iconurl: 'https://lh3.googleusercontent.com/-KGsfSssKoEU/AAAAAAAAAAI/AAAAAAAAAC4/j_0iL_6y3dE/s96-c-k-no/photo.jpg',
+        name: 'docker/docker',
+        iconurl: 'https://avatars.githubusercontent.com/docker?&s=48',
         eventsCount: 200,
     }, {
         name: 'mitchellh/vagrant',
-        iconurl: 'https://yt3.ggpht.com/-cEjxni3_Jig/AAAAAAAAAAI/AAAAAAAAAAA/cMW2NEAUf-k/s88-c-k-no/photo.jpg',
+        iconurl: 'https://avatars.githubusercontent.com/mitchellh?&s=48',
         eventsCount: 198,
     }, {
-        name: 'docker/docker',
-        iconurl: 'https://goingforwardblog.files.wordpress.com/2013/01/swedish-chef.jpg',
+        name: 'torvalds/linux',
+        iconurl: 'https://avatars.githubusercontent.com/torvalds?&s=48',
         eventsCount: 30,
     }, {
         name: 'docker/compose',
-        iconurl: 'https://lh5.googleusercontent.com/-c5rVqhf66e4/UVIKJ3fXLFI/AAAAAAAAACU/s-TU4ER7-Ro/w800-h800/kimmie.jpg',
+        iconurl: 'https://avatars.githubusercontent.com/docker?&s=48',
+        eventsCount: 5
+    }, {
+        name: 'fgrehm/vagrant-lxc',
+        iconurl: 'https://avatars.githubusercontent.com/fgrehm?&s=48',
         eventsCount: 5
     }];
 
