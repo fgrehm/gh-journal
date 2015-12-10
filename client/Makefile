@@ -23,6 +23,11 @@ clean:; rm -rf $(output) browserify-cache.json
 .PHONY: build
 build: javascript stylesheet rest
 
+.PHONY: build.watch
+build.watch:
+	$(MAKE) build || true
+	watchf -e "write,remove,create" -c "clear" -c "make build" -include ".(js|scss|html)$$" -r
+
 .PHONY: javascript
 javascript: $(output_js)
 

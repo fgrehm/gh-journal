@@ -2,6 +2,15 @@
 hack:
 	docker-compose -f docker-compose.dev.yml run --service-ports --rm hack
 
+.PHONY: build.watch
+build.watch:
+	$(MAKE) build || true
+	watchf -e "write,remove,create" -c "clear" -c "make build" -include ".go$$" -r
+
+.PHONY: client.build.watch
+client.build.watch:
+	@cd client && $(MAKE) build.watch
+
 .PHONY: test
 test:
 	@echo 'Running tests...'
