@@ -71,6 +71,12 @@
 			"path": "/netrc"
 		},
 		{
+			"importpath": "github.com/jasonlvhit/gocron",
+			"repository": "https://github.com/jasonlvhit/gocron",
+			"revision": "b075c79d7ad9188ff6331cf9900de8c4811dc1a2",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/jingweno/go-sawyer",
 			"repository": "https://github.com/jingweno/go-sawyer",
 			"revision": "1999ae5763d678f3ce1112cf1fda7c7e9cf2aadf",
