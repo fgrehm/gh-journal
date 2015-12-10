@@ -6,11 +6,17 @@ import (
 	"time"
 
 	"ghjournal"
+
+	"github.com/jasonlvhit/gocron"
 	log "github.com/Sirupsen/logrus"
 	"gopkg.in/mgo.v2"
 )
 
 func main() {
+	syncAndShowStars()
+	gocron.Every(5).Minutes().Do(syncAndShowStars)
+	gocron.Start()
+
 	log.SetLevel(log.InfoLevel)
 	ghjournal.RunServer("8080")
 }
