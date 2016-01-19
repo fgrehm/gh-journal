@@ -4,11 +4,6 @@
     "node": "0.12.7"
   },
   "dependencies": {
-    "angular": "^1.4.8",
-    "angular-animate": "^1.4.8",
-    "angular-aria": "^1.4.8",
-    "angular-material": "^0.11.4",
-    "angular-ui-router": "^0.2.15",
     "autoprefixer": "^6.0.3",
     "browserify": "^12.0.1",
     "browserify-incremental": "^3.0.1",
