@@ -176,3 +176,79 @@ db.events.aggregate([
   { $sort: { "yearMonthDay": -1 } },
 ]);
 ```
+
+## Issues updated
+
+```js
+db.events.aggregate([
+  {
+    "$match": { "type": "IssuesEvent" }
+  },
+  {
+    "$sort": { "created_at": -1 }
+  },
+  {
+    "$project": {
+      "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
+      "action":       true,
+      "title":        "$raw.payload.issue.title",
+      "url":          "$raw.payload.issue.number",
+    }
+  },
+  {
+    $group: {
+      _id:        { "d": "$yearMonthDay", "r": "$repository", "b": "$number" },
+      title:      { "$last": "$title"},
+      lastAction: { "$last": "$action" },
+    }
+  },
+  { $sort: { "_id.d": -1, "_id.r": 1, "_id.n": 1 } },
+]);
+```
+
+## Issues with comments
+
+```js
+// TODO
+```
+
+## PRs updated
+
+```js
+db.events.aggregate([
+  {
+    "$match": { "type": "PullRequestEvent" }
+  },
+  {
+    "$sort": { "created_at": -1 }
+  },
+  {
+    "$project": {
+      "_id":          false,
+      "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      "actor":        true,
+      "action":       true,
+      "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
+      "title":        "$raw.payload.pull_request.title",
+      "number":       "$raw.payload.pull_request.number",
+      "merged":       "$raw.payload.pull_request.merged",
+    }
+  },
+  {
+    $group: {
+      _id:             { "d": "$yearMonthDay", "r": "$repository", "n": "$number" },
+      title:           { "$last": "$title"},
+      lastAction:      { "$last": "$action" },
+      lastMergedState: { "$last": "$merged" },
+    }
+  },
+  { $sort: { "_id.d": -1, "_id.r": 1, "_id.u": 1 } },
+]);
+```
+
+## PRs with comments
+
+```js
+// TODO
+```
