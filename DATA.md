@@ -32,16 +32,15 @@ db.events.aggregate([
   {
     $project: {
       yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
-      actor:        true,
       repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
-      raw:          true,
+      forkee:       "$raw.payload.forkee.full_name",
     }
   },
   {
     $group: {
       _id:     { d: '$yearMonthDay', r: '$repository' },
       total:   { $sum: 1 },
-      forkees: { $addToSet: '$raw.payload.forkee.full_name' },
+      forkees: { $addToSet: '$forkee' },
     }
   },
   { $sort: { '_id.d': -1, '_id.r': 1, total: -1 } },
@@ -57,12 +56,8 @@ db.events.aggregate([
       type: 'WatchEvent'
     }
   },
-  { $sort: { created_at: 1 } },
   {
     $project: {
-      type:         true,
-      action:       true,
-      created_at:   true,
       actor:        true,
       repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
       yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
@@ -76,5 +71,108 @@ db.events.aggregate([
     }
   },
   { $sort: { '_id.d': -1, '_id.r': 1, total: -1 } },
+]);
+```
+
+## Added as a collaborator
+
+```js
+db.events.aggregate([
+  {
+    $match: {
+      type: 'MemberEvent',
+      'raw.payload.action': 'added'
+    }
+  },
+  {
+    $project: {
+      type:         true,
+      action:       true,
+      created_at:   true,
+      repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
+      yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      collaborator: '$raw.payload.member.login',
+    }
+  },
+  {
+    $group: {
+      _id:           { d: '$yearMonthDay', r: '$repository' },
+      total:         { $sum: 1 },
+      collaborators: { $addToSet: '$collaborator' },
+    }
+  },
+  { $sort: { '_id.d': -1, '_id.r': 1, total: -1 } },
+]);
+```
+
+## Branches updated
+
+```js
+db.events.aggregate([
+  { $match: { type: 'PushEvent' } },
+  {
+    $project: {
+      type:         true,
+      repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
+      yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      branch:       { $substr: [ "$raw.payload.ref", 11, -1 ] },
+      before:       '$raw.payload.before',
+      head:         '$raw.payload.head',
+    }
+  },
+  {
+    $group: {
+      _id:    { d: '$yearMonthDay', r: '$repository', b: '$branch' },
+      before: { $first: '$before' },
+      head:   { $last: '$head' },
+    }
+  },
+  { $sort: { '_id.d': -1, '_id.r': 1, '_id.b': 1 } }
+]);
+```
+
+## New branches
+
+```js
+db.events.aggregate([
+  {
+    "$match": {
+      "type":                 "CreateEvent",
+      "raw.payload.ref_type": "branch",
+    }
+  },
+  {
+    "$project": {
+      "_id":          false,
+      "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      "actor":        true,
+      "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
+      "branch":       "$raw.payload.ref",
+    }
+  },
+  { $sort: { "yearMonthDay": -1 } },
+]);
+```
+
+## Deleted branches
+
+```js
+db.events.aggregate([
+  {
+    "$match": {
+      "type":                 "DeleteEvent",
+      "raw.payload.ref_type": "branch",
+    }
+  },
+  {
+    "$project": {
+      "_id":          false,
+      "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      "actor":        true,
+      "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
+      "branch":       "$raw.payload.ref",
+    }
+  },
+  { $sort: { "yearMonthDay": -1 } },
 ]);
 ```
