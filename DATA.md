@@ -10,6 +10,7 @@ db.events.aggregate([
   },
   {
     "$project": {
+      "_id":          false,
       "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
       "actor":        true,
       "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
@@ -30,9 +31,9 @@ db.events.aggregate([
   },
   {
     $project: {
+      yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
       actor:        true,
       repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
-      yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
       raw:          true,
     }
   },
@@ -53,11 +54,7 @@ db.events.aggregate([
 db.events.aggregate([
   {
     $match: {
-      type: 'WatchEvent',
-      created_at: {
-        $gte: ISODate("2016-01-20T00:00:00Z"),
-        $lt:  ISODate("2016-01-21T00:00:00Z")
-      }
+      type: 'WatchEvent'
     }
   },
   { $sort: { created_at: 1 } },
@@ -73,9 +70,9 @@ db.events.aggregate([
   },
   {
     $group: {
-      _id:          { d: '$yearMonthDay', r: '$repository' },
-      total:        { $sum: 1 },
-      stargazers:   { $push: '$actor' },
+      _id:        { d: '$yearMonthDay', r: '$repository' },
+      total:      { $sum: 1 },
+      stargazers: { $addToSet: '$actor' },
     }
   },
   { $sort: { '_id.d': -1, '_id.r': 1, total: -1 } },
