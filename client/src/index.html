@@ -19,27 +19,40 @@
       </section>
     </header>
     <section class="container" id="timeline">
-      <section>
-        <h4>January 1st, 2016</h4>
-        <section class="item">
-          <h5>New projects</h5>
-          <ul>
-            <li><a href="#">USER/REPO</a> by <a href="#">@asdasasdasdasd</a></li>
-            <li><a href="#">USER/REPOsitory</a> by <a href="#">ACTOR</a></li>
-          </ul>
-        </section>
+      <h4 data-bind="date">YYYY-MM-DD</h4>
+      <section class="item">
+        <h5>New projects</h5>
+        <em data-bind="noNewProjectsMsg"></em>
+        <ul data-bind="newProjects">
+          <li>
+            <a href="#" data-bind="project" target="_blank"></a>
+            by
+            <a href="#" data-bind="user" target="_blank"></a>
+          </li>
+        </ul>
       </section>
       <section class="item">
         <h5>Forks</h5>
-        <ul>
-          <li><a href="#">@fgrehm</a> forked <a href="#">USER/REPO</a> to <a href="#">other/newrepo</a></li>
-          <li><a href="#">@_solnic_</a> forked <a href="#">USER/REPO</a> to <a href="#">other/newrepo</a></li>
+        <em data-bind="noForksMsg"></em>
+        <ul data-bind="forks">
+          <li>
+            <a href="#" data-bind="user" target="_blank"></a>
+            forked
+            <a href="#" data-bind="repository" target="_blank"></a>
+            to
+            <a href="#" data-bind="newRepository" target="_blank"></a>
+          </li>
         </ul>
       </section>
       <section class="item">
         <h5>Stars</h5>
-        <ul>
-          <li><a href="#">user/repo</a> was starred by <a href="#">@someuser</a>, <a href="#">@otheruser</a></li>
+        <em data-bind="noStarsMsg"></em>
+        <ul data-bind="stars">
+          <li>
+            <a href="#" data-bind="project" target="_blank"></a>
+            was starred by
+            <span data-bind="stargazerLinks"></span>
+          </li>
         </ul>
       </section>
     </section>
