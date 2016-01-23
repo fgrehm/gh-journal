@@ -10,13 +10,12 @@ db.events.aggregate([
   },
   {
     "$project": {
-      "_id":          false,
-      "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
-      "actor":        true,
-      "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
+      "_id":     false,
+      "user":    "$actor",
+      "project": { $concat: [ "$project.owner", "/", "$project.name"] },
     }
   },
-  { $sort: { "yearMonthDay": -1 } },
+  { $sort: { "project": 1 } },
 ]);
 ```
 
@@ -31,19 +30,13 @@ db.events.aggregate([
   },
   {
     $project: {
-      yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
-      repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
-      forkee:       "$raw.payload.forkee.full_name",
+      _id:           false,
+      user:          "$actor",
+      repository:    { $concat: [ "$project.owner", "/", "$project.name"] },
+      newRepository: "$raw.payload.forkee.full_name",
     }
   },
-  {
-    $group: {
-      _id:     { d: '$yearMonthDay', r: '$repository' },
-      total:   { $sum: 1 },
-      forkees: { $addToSet: '$forkee' },
-    }
-  },
-  { $sort: { '_id.d': -1, '_id.r': 1, total: -1 } },
+  { $sort: { '_id': 1 } },
 ]);
 ```
 
@@ -58,19 +51,18 @@ db.events.aggregate([
   },
   {
     $project: {
-      actor:        true,
-      repository:   { $concat: [ "$project.owner", "/", "$project.name"] },
-      yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
+      actor:      true,
+      repository: { $concat: [ "$project.owner", "/", "$project.name"] },
     }
   },
   {
     $group: {
-      _id:        { d: '$yearMonthDay', r: '$repository' },
-      total:      { $sum: 1 },
+      _id:        '$repository',
+      repository: { "$first": "$repository" },
       stargazers: { $addToSet: '$actor' },
     }
   },
-  { $sort: { '_id.d': -1, '_id.r': 1, total: -1 } },
+  { $sort: { '_id': 1 } },
 ]);
 ```
 
