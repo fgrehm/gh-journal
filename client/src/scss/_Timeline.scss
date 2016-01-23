@@ -1,0 +1,26 @@
+/* Timeline
+// –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#timeline {
+  margin-top: 6rem;
+
+  h4 {
+    text-transform: uppercase;
+    border-bottom: solid 1px $color-secondary;
+    font-weight: bold;
+  }
+  h5 {
+    text-transform: uppercase;
+    margin-bottom: 0;
+    font-weight: bold;
+  }
+
+  ul {
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+
+  li {
+    font-size: 88%;
+  }
+}

@@ -1,4 +1,18 @@
-body {
-  background: black;
-  color: white;
-}
+@import 'scss/Color';
+
+@import '../node_modules/milligram-scss/dist/Base';
+// @import '../node_modules/milligram-scss/dist/Blockquote';
+// @import '../node_modules/milligram-scss/dist/Button';
+// @import '../node_modules/milligram-scss/dist/Code';
+// @import '../node_modules/milligram-scss/dist/Form';
+@import '../node_modules/milligram-scss/dist/Grid';
+// @import '../node_modules/milligram-scss/dist/Link';
+@import '../node_modules/milligram-scss/dist/List';
+// @import '../node_modules/milligram-scss/dist/Misc';
+@import '../node_modules/milligram-scss/dist/Spacing';
+// @import '../node_modules/milligram-scss/dist/Table';
+@import '../node_modules/milligram-scss/dist/Typography';
+// @import '../node_modules/milligram-scss/dist/Utility';
+
+@import 'scss/Header';
+@import 'scss/Timeline';
