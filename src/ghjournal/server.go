@@ -1,11 +1,12 @@
 package ghjournal
 
 import (
-	// "net/http"
+	"net/http"
+	"time"
 
+	log "github.com/Sirupsen/logrus"
 	el "github.com/deoxxa/echo-logrus"
 	"github.com/labstack/echo"
-	log "github.com/Sirupsen/logrus"
 	mw "github.com/labstack/echo/middleware"
 )
 
@@ -18,7 +19,7 @@ func RunServer(port string) {
 	e.Use(mw.Recover())
 
 	// Routes
-	// e.Get("/", hello)
+	e.Get("/report/:date", showReport)
 
 	// Serve static files
 	e.Index("www/index.html")
@@ -29,7 +30,16 @@ func RunServer(port string) {
 	e.Run(":" + port)
 }
 
-// // Handler
-// func hello(c *echo.Context) error {
-// 	return c.String(http.StatusOK, "Hello, World!\n")
-// }
+func showReport(c *echo.Context) error {
+	date, err := time.Parse(time.RFC3339, c.Param("date")+"T00:00:00Z")
+	if err != nil {
+		return err
+	}
+
+	data, err := buildReport(date)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, data)
+}
