@@ -230,33 +230,59 @@ db.events.aggregate([
 ```js
 db.events.aggregate([
   {
-    "$match": { "type": "PullRequestEvent" }
+    "$match": {
+      "$or": [
+        { "type": { "$in": ["PullRequestEvent", "PullRequestReviewCommentEvent"] } },
+        {
+          "type": "IssueCommentEvent",
+          "raw.payload.issue.pull_request": { "$exists": true }
+        }
+      ]
+    }
   },
   {
-    "$sort": { "created_at": -1 }
+    "$sort": { "created_at": 1 }
   },
   {
     "$project": {
       "_id":          false,
+      "created_at":   true,
       "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
       "actor":        true,
-      "action":       true,
+      "action":       { "$cond": { "if": { "$eq": [ "$type", "IssueCommentEvent" ] }, then: "commented", else: "$action" } },
       "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
-      "title":        "$raw.payload.pull_request.title",
-      "number":       "$raw.payload.pull_request.number",
+      "title":        { "$ifNull": [ "$raw.payload.pull_request.title", "$raw.payload.issue.title" ] },
+      "number":       { "$ifNull": [ "$raw.payload.pull_request.number", "$raw.payload.issue.number" ] },
+      "url":          { "$ifNull": [ "$raw.payload.pull_request.html_url", "$raw.payload.issue.html_url" ] },
       "merged":       "$raw.payload.pull_request.merged",
     }
   },
   {
     $group: {
-      _id:             { "d": "$yearMonthDay", "r": "$repository", "n": "$number" },
-      title:           { "$last": "$title"},
-      lastAction:      { "$last": "$action" },
-      lastMergedState: { "$last": "$merged" },
+      _id:          { "r": "$repository", "n": "$number" },
+      title:        { "$last": "$title"},
+      actions:      { "$push": "$action" },
+      mergedStates: { "$push": "$merged" },
+      actors:       { "$addToSet": "$actor" },
+      url:          { "$first": "$url" },
     }
   },
-  { $sort: { "_id.d": -1, "_id.r": 1, "_id.u": 1 } },
-]);
+  {
+    $group: {
+      _id: "$_id.r",
+      prsUpdated: {
+        "$addToSet": {
+          number:  "$_id.n",
+          url:     "$url",
+          title:   "$title",
+          actions: "$actions",
+          actors:  "$actors",
+          mergedStates: "$mergedStates"
+        }
+      }
+    }
+  },
+])
 ```
 
 ## PRs with comments
