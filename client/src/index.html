@@ -13,15 +13,25 @@
   <body>
     <header class="header">
       <section class="container">
-        <a href="index.html">
-          <h1 class="title">GitHub Journal</h1>
-        </a>
+        <h1 class="title">GitHub Journal</h1>
       </section>
     </header>
     <section class="container" id="timeline">
-      <h4 data-bind="date">YYYY-MM-DD</h4>
+      <h3>
+        <a class="button" href="#" data-bind="prevDate">
+          <span class="mega-octicon octicon-arrow-left"></span>
+        </a>
+        <span data-bind="date">YYYY-MM-DD</span>
+        <a class="button" href="#" data-bind="nextDate">
+          <span class="mega-octicon octicon-arrow-right"></span>
+        </a>
+      </h3>
       <section class="item">
-        <h5>New projects</h5>
+        <h5>
+          <span class="mega-octicon octicon-repo"></span>
+          New projects
+          <span class="mega-octicon octicon-repo"></span>
+        </h5>
         <em data-bind="noNewProjectsMsg"></em>
         <ul data-bind="newProjects">
           <li>
@@ -32,7 +42,11 @@
         </ul>
       </section>
       <section class="item">
-        <h5>Forks</h5>
+        <h5>
+          <span class="mega-octicon octicon-repo-forked"></span>
+          Forks
+          <span class="mega-octicon octicon-repo-forked"></span>
+        </h5>
         <em data-bind="noForksMsg"></em>
         <ul data-bind="forks">
           <li>
@@ -45,7 +59,11 @@
         </ul>
       </section>
       <section class="item">
-        <h5>Stars</h5>
+        <h5>
+          <span class="mega-octicon octicon-star"></span>
+          Stars
+          <span class="mega-octicon octicon-star"></span>
+        </h5>
         <em data-bind="noStarsMsg"></em>
         <ul data-bind="stars">
           <li>

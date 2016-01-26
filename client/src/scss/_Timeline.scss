@@ -4,10 +4,11 @@
 #timeline {
   margin-top: 6rem;
 
-  h4 {
+  h3 {
     text-transform: uppercase;
-    border-bottom: solid 1px $color-secondary;
     font-weight: bold;
+    display: flex;
+    justify-content: space-between;
   }
   h5 {
     text-transform: uppercase;
@@ -16,11 +17,21 @@
   }
 
   ul {
-    margin-top: 0.3rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 3rem;
   }
 
   li {
     font-size: 88%;
+  }
+
+  .button {
+    padding: 0 1rem;
+  }
+}
+
+// Mobile screens
+@media (max-width: 40.0rem) {
+  #timeline h5 {
+    text-align: center;
   }
 }

@@ -1,10 +1,39 @@
 package ghjournal
 
 import (
+	"os"
+
 	log "github.com/Sirupsen/logrus"
+	"gopkg.in/mgo.v2"
 )
 
-func ImportEvents(client GitHubClient, repo EventsRepository) error {
+func SyncEvents() {
+	// MONGO_HOST
+	mongoHost := os.Getenv("MONGO_PORT_27017_TCP_ADDR")
+	token := os.Getenv("GITHUB_TOKEN")
+	userName := os.Getenv("GITHUB_USER")
+	if userName == "" {
+		panic("GITHUB_USER is not set")
+	}
+
+	client, err := NewGitHubClient(userName, token)
+	if err != nil {
+		panic(err)
+	}
+
+	session, err := mgo.Dial(mongoHost)
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+
+	repo := NewEventsRepository(session.DB("gh-journal"))
+	if err = importEvents(client, repo); err != nil {
+		panic(err)
+	}
+}
+
+func importEvents(client GitHubClient, repo EventsRepository) error {
 	for pageNum := 1; pageNum <= 10; pageNum++ {
 		log.Printf("Importing events from page %d...", pageNum)
 		ghEvents, err := client.Events(pageNum)

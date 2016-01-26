@@ -1,112 +1,35 @@
-require('transparency');
 var moment = require('moment');
+var renderReport = require('./javascript/render');
 
-var data = {
-  date: '2015-01-23T21:00:43Z',
-  newProjects: [
-    { project: 'fgrehm/gh-journal',         user: 'fgrehm' },
-    { project: 'sindresorhus/username-cli', user: 'sindresorhus' },
-  ],
-  forks: [
-    { user: 'wycats', repository: 'nodesource/distributions', newRepository: 'wycats/distributions' },
-  ],
-  stars: [
-    { project: 'lucasb-eyer/heatmap',     stargazers: ['tj'] },
-    { project: 'DrkSephy/es6-cheatsheet', stargazers: ['tmattia'] },
-  ]
-};
+var Mousetrap = require('mousetrap');
 
-var directives = {
-  date: {
-    text: function (params) {
-      return moment(this.date).format(params.value)
-    }
-  },
+var Rlite = require('rlite-router');
+var r = Rlite();
+// Default route
+r.add('', function () {
+  var date = moment();
 
-  noNewProjectsMsg: {
-    text: function (params) {
-      if (this.newProjects.length == 0)
-        return 'Nothing to see here today =/';
-    }
-  },
+  Mousetrap.unbind(['left', 'right']);
+  Mousetrap.bind('left',  function() { location.hash = "#" + date.subtract(1, 'days').format('YYYY-MM-DD') });
+  Mousetrap.bind('right', function() { location.hash = "#" + date.add(1, 'days').format('YYYY-MM-DD') });
 
-  newProjects: {
-    project: {
-      href: function () {
-        return 'https://github.com/' + this.project;
-      },
-      text: function () {
-        return this.project;
-      }
-    },
-    user: {
-      href: function () {
-        return 'https://github.com/' + this.user;
-      },
-      text: function () {
-        return this.user;
-      }
-    },
-  },
+  renderReport(date.format('YYYY-MM-DD'));
+});
+r.add(':date', function (r) {
+  var date = moment(r.params.date);
 
-  noForksMsg: {
-    text: function (params) {
-      if (this.forks.length == 0)
-        return 'Zero forks?!?';
-    }
-  },
+  Mousetrap.unbind(['left', 'right']);
+  Mousetrap.bind('left',  function() { location.hash = "#" + date.subtract(1, 'days').format('YYYY-MM-DD') });
+  Mousetrap.bind('right', function() { location.hash = "#" + date.add(1, 'days').format('YYYY-MM-DD') });
 
-  forks: {
-    user: {
-      href: function () {
-        return 'https://github.com/' + this.user;
-      },
-      text: function () {
-        return this.user;
-      }
-    },
-    repository: {
-      href: function () {
-        return 'https://github.com/' + this.repository;
-      },
-      text: function () {
-        return this.repository;
-      }
-    },
-    newRepository: {
-      href: function () {
-        return 'https://github.com/' + this.newRepository;
-      },
-      text: function () {
-        return this.newRepository;
-      }
-    },
-  },
+  renderReport(r.params.date);
+});
 
-  noStarsMsg: {
-    text: function (params) {
-      if (this.stars.length == 0)
-        return 'People are not feeling like sharing some love today :broken_heart:';
-    }
-  },
+// Hash-based routing
+function processHash() {
+  var hash = location.hash || '#';
+  r.run(hash.slice(1));
+}
 
-  stars: {
-    project: {
-      href: function () {
-        return 'https://github.com/' + this.project;
-      },
-      text: function () {
-        return this.project;
-      }
-    },
-    stargazerLinks: {
-      html: function () {
-        return this.stargazers.map(function (stargazer) {
-          return '<a href="https://github.com/' + stargazer + '" target="_blank">' + stargazer + '</a>';
-        }).join(', ');
-      }
-    }
-  }
-};
-
-Transparency.render(document.getElementById('timeline'), data, directives);
+window.addEventListener('hashchange', processHash);
+processHash();

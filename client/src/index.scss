@@ -1,8 +1,10 @@
+@import 'fonts/octicons/octicons.scss';
+
 @import 'scss/Color';
 
 @import '../node_modules/milligram-scss/dist/Base';
 // @import '../node_modules/milligram-scss/dist/Blockquote';
-// @import '../node_modules/milligram-scss/dist/Button';
+@import '../node_modules/milligram-scss/dist/Button';
 // @import '../node_modules/milligram-scss/dist/Code';
 // @import '../node_modules/milligram-scss/dist/Form';
 @import '../node_modules/milligram-scss/dist/Grid';

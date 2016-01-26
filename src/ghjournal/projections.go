@@ -110,17 +110,17 @@ func fetchStars(session *mgo.Session, startDate time.Time) (interface{}, error) 
 		{
 			"$project": bson.M{
 				"actor":      true,
-				"repository": bson.M{"$concat": []string{"$project.owner", "/", "$project.name"}},
+				"project": bson.M{"$concat": []string{"$project.owner", "/", "$project.name"}},
 			},
 		},
 		{
 			"$group": bson.M{
-				"_id":        "$repository",
-				"repository": bson.M{"$first": "$repository"},
+				"_id":        "$project",
+				"project":    bson.M{"$first": "$project"},
 				"stargazers": bson.M{"$addToSet": "$actor"},
 			},
 		},
-		{"$sort": bson.M{"repository": 1}},
+		{"$sort": bson.M{"project": 1}},
 	})
 	data := []interface{}{}
 	err := pipe.All(&data)
