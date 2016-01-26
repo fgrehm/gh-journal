@@ -5,9 +5,6 @@ var gitHubLink = function (attribute) {
     href: function () {
       return 'https://github.com/' + this[attribute];
     },
-    text: function () {
-      return this[attribute];
-    }
   }
 }
 
@@ -71,7 +68,36 @@ var directives = {
         }).join(', ');
       }
     }
-  }
+  },
+
+  noIssuesUpdatedMsg: {
+    text: function (params) {
+      if (this.issuesUpdated.length == 0)
+        return '... radio silence ...';
+    }
+  },
+
+  issuesUpdated: {
+    project: gitHubLink('project'),
+    issues: {
+      number: {
+        href: function () {
+          return this.url;
+        },
+        text: function () {
+          return '#' + this.number;
+        },
+      },
+      title: {
+        href: function () {
+          return this.url;
+        },
+        text: function () {
+          return this.title;
+        },
+      }
+    },
+  },
 };
 
 require('transparency');

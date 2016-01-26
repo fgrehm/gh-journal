@@ -73,6 +73,28 @@
           </li>
         </ul>
       </section>
+      <section class="item">
+        <h5>
+          <span class="mega-octicon octicon-issue-opened"></span>
+          Issues updated
+          <span class="mega-octicon octicon-issue-opened"></span>
+        </h5>
+        <em data-bind="noIssuesUpdatedMsg"></em>
+        <ul data-bind="issuesUpdated">
+          <li>
+            <a href="#" target="_blank" data-bind="project"></a>
+            <ul data-bind="issues">
+              <li>
+                <a href="#" target="_blank" data-bind="number"></a>
+                -
+                <a href="#" target="_blank" data-bind="title"></a>
+                <span data-bind="lastState"></span>
+                <span data-bind="actors"></span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
     </section>
 
     <script type="text/javascript" src="js/index.js"></script>

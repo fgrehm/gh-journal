@@ -174,29 +174,49 @@ db.events.aggregate([
 ```js
 db.events.aggregate([
   {
-    "$match": { "type": "IssuesEvent" }
+    "$match": {
+      "type": { "$in": ["IssuesEvent", "IssueCommentEvent"] },
+      "raw.payload.issue.pull_request": { $exists: false },
+    }
   },
   {
     "$sort": { "created_at": -1 }
   },
   {
     "$project": {
-      "yearMonthDay": { $dateToString: { format: "%Y-%m-%d", date: "$created_at" } },
       "repository":   { $concat: [ "$project.owner", "/", "$project.name"] },
       "action":       true,
+      "actor":        true,
+      "state":        "$raw.payload.issue.state",
       "title":        "$raw.payload.issue.title",
-      "url":          "$raw.payload.issue.number",
+      "number":       "$raw.payload.issue.number",
+      "url":          "$raw.payload.issue.html_url",
     }
   },
   {
     $group: {
-      _id:        { "d": "$yearMonthDay", "r": "$repository", "b": "$number" },
-      title:      { "$last": "$title"},
-      lastAction: { "$last": "$action" },
+      _id:       { "r": "$repository", "n": "$number" },
+      url:       { "$first": "$url"},
+      actors:    { "$addToSet": "$actor" },
+      title:     { "$last": "$title"},
+      lastState: { "$last": "$state" },
     }
   },
-  { $sort: { "_id.d": -1, "_id.r": 1, "_id.n": 1 } },
-]);
+  {
+    $group: {
+      _id: "$_id.r",
+      issuesUpdated: {
+        "$addToSet": {
+          number:    "$_id.n",
+          url:       "$url",
+          title:     "$title",
+          lastState: "$lastState",
+          actors:    "$actors",
+        }
+      }
+    }
+  },
+])
 ```
 
 ## Issues with comments
