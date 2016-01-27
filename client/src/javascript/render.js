@@ -98,6 +98,27 @@ var directives = {
       }
     },
   },
+
+  noPRsUpdatedMsg: {
+    text: function (params) {
+      if (this.issuesUpdated.length == 0)
+        return 'Looks like people are quiet today';
+    }
+  },
+
+  prsUpdated: {
+    project: gitHubLink('project'),
+    prs: {
+      number: {
+        href: function () { return this.url; },
+        text: function () { return '#' + this.number; },
+      },
+      title: {
+        href: function () { return this.url; },
+        text: function () { return this.title; },
+      }
+    },
+  },
 };
 
 require('transparency');

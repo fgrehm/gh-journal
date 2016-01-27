@@ -23,17 +23,24 @@ func buildReport(date time.Time) (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	forks, err := fetchForks(session, date)
-	if err != nil {
-		return nil, err
-	}
-
 	stars, err := fetchStars(session, date)
 	if err != nil {
 		return nil, err
 	}
 
+	// TODO: tags / releases
+
+	forks, err := fetchForks(session, date)
+	if err != nil {
+		return nil, err
+	}
+
 	issuesUpdated, err := fetchIssuesUpdated(session, date)
+	if err != nil {
+		return nil, err
+	}
+
+	prsUpdated, err := fetchPRsUpdated(session, date)
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +51,7 @@ func buildReport(date time.Time) (map[string]interface{}, error) {
 		"forks":         forks,
 		"stars":         stars,
 		"issuesUpdated": issuesUpdated,
+		"prsUpdated":    prsUpdated,
 	}, nil
 }
 
@@ -182,6 +190,71 @@ func fetchIssuesUpdated(session *mgo.Session, startDate time.Time) (interface{},
 			},
 		},
 		{"$sort": bson.M{"project": 1}},
+	})
+	data := []interface{}{}
+	err := pipe.All(&data)
+	return data, err
+}
+
+func fetchPRsUpdated(session *mgo.Session, startDate time.Time) (interface{}, error) {
+	endDate := startDate.AddDate(0, 0, 1)
+	pipe := session.DB("gh-journal").C("events").Pipe([]bson.M{
+		{
+			"$match": bson.M{
+				"$or": []bson.M{
+					bson.M{ "type": bson.M{"$in": []string{"PullRequestEvent", "PullRequestReviewCommentEvent"}} },
+					bson.M{
+						"type": "IssueCommentEvent",
+						"raw.payload.issue.pull_request": bson.M{"$exists": true},
+					},
+				},
+				"created_at": bson.M{
+					"$gte": startDate,
+					"$lt":  endDate,
+				},
+			},
+		},
+		{ "$sort": bson.M{"created_at": 1} },
+		{
+			"$project": bson.M{
+				"_id":          false,
+				"created_at":   true,
+				"actor":        true,
+				"action":       bson.M{ "$cond": bson.M{ "if": bson.M{ "$eq": []string{ "$type", "IssueCommentEvent" } }, "then": "commented", "else": "$action" } },
+				"repository":   bson.M{ "$concat": []string{ "$project.owner", "/", "$project.name" } },
+				"title":        bson.M{ "$ifNull": []string{ "$raw.payload.pull_request.title", "$raw.payload.issue.title" } },
+				"number":       bson.M{ "$ifNull": []string{ "$raw.payload.pull_request.number", "$raw.payload.issue.number" } },
+				"url":          bson.M{ "$ifNull": []string{ "$raw.payload.pull_request.html_url", "$raw.payload.issue.html_url" } },
+				"merged":       "$raw.payload.pull_request.merged",
+			},
+		},
+		{
+			"$group": bson.M{
+				"_id":          bson.M{ "r": "$repository", "n": "$number" },
+				"title":        bson.M{ "$last": "$title"},
+				"actions":      bson.M{ "$push": "$action" },
+				"mergedStates": bson.M{ "$push": "$merged" },
+				"actors":       bson.M{ "$addToSet": "$actor" },
+				"url":          bson.M{ "$first": "$url" },
+			},
+		},
+		{
+			"$group": bson.M{
+				"_id": "$_id.r",
+				"project": bson.M{"$first": "$_id.r"},
+				"prs": bson.M{
+					"$addToSet": bson.M{
+						"number":  "$_id.n",
+						"url":     "$url",
+						"title":   "$title",
+						"actions": "$actions",
+						"actors":  "$actors",
+						"mergedStates": "$mergedStates",
+					},
+				},
+			},
+		},
+		{ "$sort": bson.M{"project": 1} },
 	})
 	data := []interface{}{}
 	err := pipe.All(&data)

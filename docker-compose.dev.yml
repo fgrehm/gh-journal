@@ -1,5 +1,5 @@
 hack:
-  image: fgrehm/alpine-go-web:1.5.1
+  image: fgrehm/alpine-go-web:1.5.3
   command: bash
   ports:
   - '8080:8080'
