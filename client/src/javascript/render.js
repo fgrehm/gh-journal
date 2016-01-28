@@ -16,6 +16,16 @@ var description = {
   }
 };
 
+var userLinks = function (attribute) {
+  return {
+    html: function () {
+      return this[attribute].map(function (user) {
+        return '<a href="https://github.com/' + user + '" target="_blank">' + user + '</a>';
+      }).join(', ');
+    }
+  };
+};
+
 var directives = {
   date: {
     text: function (params) {
@@ -71,13 +81,7 @@ var directives = {
 
   stars: {
     project: gitHubLink('project'),
-    stargazerLinks: {
-      html: function () {
-        return this.stargazers.map(function (stargazer) {
-          return '<a href="https://github.com/' + stargazer + '" target="_blank">' + stargazer + '</a>';
-        }).join(', ');
-      }
-    }
+    stargazerLinks: userLinks('stargazers'),
   },
 
   noIssuesUpdatedMsg: {
@@ -90,6 +94,7 @@ var directives = {
   issuesUpdated: {
     project: gitHubLink('project'),
     issues: {
+      actorLinks: userLinks('actors'),
       number: {
         href: function () { return this.url; },
         text: function () { return '#' + this.number; },
@@ -97,7 +102,7 @@ var directives = {
       title: {
         href: function () { return this.url; },
         text: function () { return this.title; },
-      }
+      },
     },
   },
 
@@ -111,6 +116,7 @@ var directives = {
   prsUpdated: {
     project: gitHubLink('project'),
     prs: {
+      actorLinks: userLinks('actors'),
       number: {
         href: function () { return this.url; },
         text: function () { return '#' + this.number; },
