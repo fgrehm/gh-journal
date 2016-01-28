@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	ghjournal.SyncEvents()
+	go ghjournal.SyncEvents()
 	gocron.Every(5).Minutes().Do(ghjournal.SyncEvents)
 	gocron.Start()
 
