@@ -91,20 +91,12 @@ var directives = {
     project: gitHubLink('project'),
     issues: {
       number: {
-        href: function () {
-          return this.url;
-        },
-        text: function () {
-          return '#' + this.number;
-        },
+        href: function () { return this.url; },
+        text: function () { return '#' + this.number; },
       },
       title: {
-        href: function () {
-          return this.url;
-        },
-        text: function () {
-          return this.title;
-        },
+        href: function () { return this.url; },
+        text: function () { return this.title; },
       }
     },
   },
