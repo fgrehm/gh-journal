@@ -6,7 +6,15 @@ var gitHubLink = function (attribute) {
       return 'https://github.com/' + this[attribute];
     },
   }
-}
+};
+
+var description = {
+  html: function () {
+    return this.description ?
+      this.description :
+      '<em>No description set</em>';
+  }
+};
 
 var directives = {
   date: {
@@ -36,7 +44,8 @@ var directives = {
 
   newProjects: {
     project: gitHubLink('project'),
-    user: gitHubLink('user')
+    user: gitHubLink('user'),
+    description: description,
   },
 
   noForksMsg: {
@@ -50,6 +59,7 @@ var directives = {
     user: gitHubLink('user'),
     repository: gitHubLink('repository'),
     newRepository: gitHubLink('newRepository'),
+    description: description,
   },
 
   noStarsMsg: {
