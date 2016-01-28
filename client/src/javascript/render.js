@@ -95,6 +95,9 @@ var directives = {
     project: gitHubLink('project'),
     issues: {
       actorLinks: userLinks('actors'),
+      lastState: {
+        class: function () { return 'issue-state ' + this.lastState; },
+      },
       number: {
         href: function () { return this.url; },
         text: function () { return '#' + this.number; },

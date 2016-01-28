@@ -27,6 +27,20 @@
   .button {
     padding: 0 1rem;
   }
+
+  .issue-state {
+    padding: 0.2rem 1rem;
+    border-radius: 5px;
+    color: white;
+  }
+
+  .open {
+    background-color: green;
+  }
+
+  .closed {
+    background-color: red;
+  }
 }
 
 // Mobile screens
