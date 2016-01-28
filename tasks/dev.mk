@@ -2,6 +2,10 @@
 hack:
 	docker-compose -f docker-compose.dev.yml run --service-ports --rm hack
 
+.PHONY: run
+run: build
+	./bin/gh-journal
+
 .PHONY: build.watch
 build.watch:
 	$(MAKE) build || true
