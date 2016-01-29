@@ -95,8 +95,9 @@ var directives = {
     project: gitHubLink('project'),
     issues: {
       actorLinks: userLinks('actors'),
+      author: gitHubLink('author'),
       lastState: {
-        class: function () { return 'issue-state ' + this.lastState; },
+        class: function () { return 'badge ' + this.lastState; },
       },
       number: {
         href: function () { return this.url; },
@@ -120,6 +121,30 @@ var directives = {
     project: gitHubLink('project'),
     prs: {
       actorLinks: userLinks('actors'),
+      author: gitHubLink('author'),
+      isNew: {
+        class: function () {
+          for (var i = 0; i < this.actions.length; i++)
+            if (this.actions[i] == 'created')
+              return 'badge new';
+        },
+        text: function () {
+          console.log(this.actions);
+          for (var i = 0; i < this.actions.length; i++)
+            if (this.actions[i] == 'created')
+              return 'new';
+        },
+      },
+      merged: {
+        class: function () {
+          if (this.mergedStates[this.mergedStates.length-1])
+            return 'badge merged';
+        },
+        text: function () {
+          if (this.mergedStates[this.mergedStates.length-1])
+            return 'merged';
+        },
+      },
       number: {
         href: function () { return this.url; },
         text: function () { return '#' + this.number; },

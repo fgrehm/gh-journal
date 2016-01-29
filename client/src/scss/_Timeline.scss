@@ -36,16 +36,18 @@
     padding: 0 1rem;
   }
 
-  .issue-state {
+  .badge {
     padding: 0.2rem 1rem;
     border-radius: 5px;
     color: white;
   }
 
-  .open {
+  .new {
+    background-color: gray;
+  }
+  .open, .merged {
     background-color: green;
   }
-
   .closed {
     background-color: red;
   }
